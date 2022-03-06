@@ -21,11 +21,10 @@ def load_some_champs():
 
 sock = socket(AF_INET,SOCK_DGRAM)
 
-
 sock.bind("",5555)
 
 while True:
-    req, source = sock.recvfrom(64).decode('utf-8')
+    req, source = sock.recvfrom(64).decode()
     db = load_some_champs()
     ans = db[req]
     sock.sendto(ans,source)
