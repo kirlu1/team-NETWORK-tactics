@@ -22,7 +22,7 @@ def load_some_champs():
 
 sock = socket(AF_INET,SOCK_DGRAM)
 
-sock.bind("",5555)
+sock.bind(("",5555))
 
 while True:
     _, source = sock.recvfrom(1024).decode()
