@@ -19,12 +19,13 @@ def from_csv(filename: str) -> dict[str, Champion]:
 def load_some_champs():
     return from_csv('some_champs.txt')
 
+
 sock = socket(AF_INET,SOCK_DGRAM)
 
 sock.bind("",5555)
 
 while True:
-    req, source = sock.recvfrom(64).decode()
+    _, source = sock.recvfrom(1024).decode()
     db = load_some_champs()
-    ans = db[req]
+    ans = str(load_some_champs()).encode()
     sock.sendto(ans,source)
