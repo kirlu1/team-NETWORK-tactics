@@ -68,17 +68,18 @@ def print_match_summary(match: Match) -> None:
 
 def input_champ(sock: socket):
     prompt = sock.recv(1024).decode()
-    
     if prompt == "Pick a champion: ":
         while 1:
             choice = input(prompt)
             sock.send(choice.encode())
-            success = pic.load(sock.recv(32))
-            print(sock.recv(1024).decode())
-            if success:
+            ans = sock.recv(1024).decode()
+            print(ans)
+            if ans[-5:] == "team.":
                 break
     else:
-        print(sock.recv(1024).decode())
+        print(prompt)
+        oppopicked = sock.recv(1024).decode()
+        print(oppopicked)
         
 
 
@@ -90,7 +91,9 @@ print(sock.recv(1024).decode())
 
 print(sock.recv(1024).decode())
 
-champions = pic.load(sock.recv(4096))
+picklechamp = sock.recv(4096)
+
+champions = pic.loads(picklechamp)
 
 print_available_champs(champions)
 print("\n")
@@ -100,7 +103,7 @@ for _ in range(4):
 
 print("\n")
 
-match = pic.load(sock.recv(2048))
+match = pic.loads(sock.recv(2048))
 print_match_summary(match)
 
 print("\n\nGG")

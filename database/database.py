@@ -2,6 +2,7 @@ from core import Champion
 from socket import socket, AF_INET, SOCK_DGRAM
 import pickle as pic
 
+
 def _parse_champ(champ_text: str) -> Champion:
     name, rock, paper, scissors = champ_text.split(sep=',')
     return Champion(name, float(rock), float(paper), float(scissors))
@@ -23,8 +24,9 @@ sock = socket(AF_INET,SOCK_DGRAM)
 
 sock.bind(("",5555))
 
-while True:
+while 1:
     _, source = sock.recvfrom(1)
+    print("Sending...")
     load = load_some_champs()
     ans = pic.dumps(load)
     sock.sendto(ans,source)

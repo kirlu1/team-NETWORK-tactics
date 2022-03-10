@@ -5,6 +5,7 @@ from rich.table import Table
 import pickle as pic
 import threading as thr
 from socket import socket,AF_INET,SOCK_DGRAM
+import time
 
 def input_champion(picker: int,
                    champions: dict[Champion],
@@ -15,8 +16,9 @@ def input_champion(picker: int,
 
     # Prompt the player to choose a champion and provide the reason why
     # certain champion cannot be selected
+    print(f'Player {picker} is picking')
     psock.send("Pick a champion: ".encode())
-    wsock.send("Opponent is picking...".encode())
+    wsock.send("Opponent is picking.".encode())
     
     while True:
         match psock.recv(1024).decode():
@@ -40,47 +42,29 @@ def input_champion(picker: int,
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def main() -> None:
+    sock = socket()
+    sock.bind(("",5555))
+    sock.listen()
+    
     while 1:
-        sock = socket()
-        sock.bind(("",5555))
-        sock.listen()
-        
         print("Waiting for players...")
         p1, _ = sock.accept()
         print("Player 1 connected.")
         p1.send("You are player 1. Waiting for opponent...\n".encode())
         p2, _ = sock.accept()
-        p2.send("You are player 2.\n")
+        print("Player 2 connected.")
+        p2.send("You are player 2.\n".encode())
         plrs = [p1,p2]
+        welcomemsg = "\nWelcome to [bold yellow]Team Network Tactics[/bold yellow]!\nEach player chooses a champion each turn.\n".encode()
+        time.sleep(1)
         for i in plrs:
-            i.send("\nWelcome to [bold yellow]Team Local Tactics[/bold yellow]!\nEach player choose a champion each time.\n")
+            i.send(welcomemsg)
 
         DBsock = socket(AF_INET,SOCK_DGRAM)
-        DBsock.sendto(" ".encode(),("tntserver",5555))
+        DBsock.sendto(" ".encode(),("tntdb",5555))
         picklechamp = DBsock.recv(4096)
-        champions = pic.load(picklechamp)
+        champions = pic.loads(picklechamp)
         
         for i in plrs:
             i.send(picklechamp)
@@ -88,6 +72,7 @@ def main() -> None:
         player1 = []
         player2 = []
 
+        time.sleep(1)
         # Champion selection
         for _ in range(2):
             input_champion(1, champions, player1, player2, p1, p2)
@@ -105,6 +90,7 @@ def main() -> None:
         for i in plrs:
             i.send(picklematch)
             i.close()
+        print("Game finished\n")
 
 
 if __name__ == '__main__':
