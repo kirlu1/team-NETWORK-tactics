@@ -51,13 +51,13 @@ def main() -> None:
         print("Waiting for players...")
         p1, _ = sock.accept()
         print("Player 1 connected.")
-        p1.send("You are player 1. Waiting for opponent...\n".encode())
+        p1.send("You are [bold red]Red[/bold red]. Waiting for opponent...\n".encode())
         p2, _ = sock.accept()
         print("Player 2 connected.")
-        p2.send("You are player 2.\n".encode())
+        p2.send("You are [blue]Blue[/blue].\n".encode())
         plrs = [p1,p2]
         welcomemsg = "\nWelcome to [bold yellow]Team Network Tactics[/bold yellow]!\nEach player chooses a champion each turn.\n".encode()
-        time.sleep(0.5)
+        time.sleep(1)
         for i in plrs:
             i.send(welcomemsg)
 
@@ -72,8 +72,7 @@ def main() -> None:
         player1 = []
         player2 = []
 
-        time.sleep(0.5)
-        
+        time.sleep(1)
         # Champion selection
         for _ in range(2):
             input_champion(1, champions, player1, player2, p1, p2)
