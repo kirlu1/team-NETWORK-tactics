@@ -40,6 +40,23 @@ def input_champion(picker: int,
                 wsock.send(wmsg.encode())
                 break
 
+def print_champs(champions: dict[Champion]):
+
+    # Create a table containing available champions
+    available_champs = Table(title='Available champions')
+
+    # Add the columns Name, probability of rock, probability of paper and
+    # probability of scissors
+    available_champs.add_column("Name", style="cyan", no_wrap=True)
+    available_champs.add_column("prob(:raised_fist-emoji:)", justify="center")
+    available_champs.add_column("prob(:raised_hand-emoji:)", justify="center")
+    available_champs.add_column("prob(:victory_hand-emoji:)", justify="center")
+
+    # Populate the table
+    for champion in champions.values():
+        available_champs.add_row(*champion.str_tuple)
+
+    return available_champs
 
 
 def main() -> None:
@@ -66,8 +83,10 @@ def main() -> None:
         picklechamp = DBsock.recv(4096)
         champions = pic.loads(picklechamp)
         
+        pickletable = pic.dumps(print_champs(champions))
+        
         for i in plrs:
-            i.send(picklechamp)
+            i.send(pickletable)
 
         player1 = []
         player2 = []

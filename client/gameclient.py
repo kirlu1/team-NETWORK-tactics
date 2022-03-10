@@ -5,23 +5,6 @@ from rich.table import Table
 from core import Champion, Shape, Match, Team
 import pickle as pic
 
-def print_available_champs(champions: dict[Champion]) -> None:
-
-    # Create a table containing available champions
-    available_champs = Table(title='Available champions')
-
-    # Add the columns Name, probability of rock, probability of paper and
-    # probability of scissors
-    available_champs.add_column("Name", style="cyan", no_wrap=True)
-    available_champs.add_column("prob(:raised_fist-emoji:)", justify="center")
-    available_champs.add_column("prob(:raised_hand-emoji:)", justify="center")
-    available_champs.add_column("prob(:victory_hand-emoji:)", justify="center")
-
-    # Populate the table
-    for champion in champions.values():
-        available_champs.add_row(*champion.str_tuple)
-
-    print(available_champs)
 
 def print_match_summary(match: Match) -> None:
 
@@ -82,8 +65,6 @@ def input_champ(sock: socket):
         print(oppopicked)
         
 
-
-
 sock = socket()
 sock.connect(("tntserver",5555))
 
@@ -91,11 +72,11 @@ print(sock.recv(1024).decode())
 
 print(sock.recv(1024).decode())
 
-picklechamp = sock.recv(4096)
+pickletable = sock.recv(4096)
 
-champions = pic.loads(picklechamp)
+champions = pic.loads(pickletable)
 
-print_available_champs(champions)
+print(champions)
 print("\n")
 
 for _ in range(4):
