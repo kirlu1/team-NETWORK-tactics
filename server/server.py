@@ -57,7 +57,7 @@ def main() -> None:
         p2.send("You are player 2.\n".encode())
         plrs = [p1,p2]
         welcomemsg = "\nWelcome to [bold yellow]Team Network Tactics[/bold yellow]!\nEach player chooses a champion each turn.\n".encode()
-        time.sleep(1)
+        time.sleep(0.5)
         for i in plrs:
             i.send(welcomemsg)
 
@@ -72,7 +72,8 @@ def main() -> None:
         player1 = []
         player2 = []
 
-        time.sleep(1)
+        time.sleep(0.5)
+        
         # Champion selection
         for _ in range(2):
             input_champion(1, champions, player1, player2, p1, p2)
